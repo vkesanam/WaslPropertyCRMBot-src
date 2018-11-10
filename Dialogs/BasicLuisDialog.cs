@@ -357,37 +357,63 @@ namespace Microsoft.Bot.Sample.LuisBot
                                     {Environment.NewLine}Phone Number: {phone},
                                     {Environment.NewLine}Email: {email}");
 
+            //PromptDialog.Confirm(
+            //context: context,
+            //resume: AnythingElseHandler,
+            //prompt: "Is there anything else that I could help?",
+            //retry: "Sorry, I don't understand that.");
+
             PromptDialog.Confirm(
-            context: context,
-            resume: AnythingElseHandler,
-            prompt: "Is there anything else that I could help?",
-            retry: "Sorry, I don't understand that.");
+                    context,
+                    AnythingElseHandler,
+                    "Is there anything else that I could help?",
+                    "Didn't get that!",
+                    promptStyle: PromptStyle.Auto);
             //CRMConnection.CreateCase(complaint, customerName, phone, email);
 
-          
+
         }
         public async Task AnythingElseHandler(IDialogContext context, IAwaitable<bool> argument)
         {
-            var answer = await argument;
-            if (answer)
+            var confirm = await argument;
+            if (confirm)
             {
-                await GeneralGreeting(context, null);
+                //this.count = 1;
+                //await context.PostAsync("Reset count.");
+                string message = $"Great! What else that can I help you?";
+                await context.PostAsync(message);
+                //context.Wait(MessageReceived);
             }
             else
             {
+                //await context.PostAsync("Did not reset count.");
                 string message = $"Thanks for using I Bot. Hope you have a great day!";
                 await context.PostAsync(message);
-
-                //var survey = context.MakeMessage();
-
-                //var attachment = GetSurveyCard();
-                //survey.Attachments.Add(attachment);
-
-                //await context.PostAsync(survey);
-
-                context.Done<string>("conversation ended.");
             }
+            context.Wait(MessageReceived);
         }
+        //public async Task AnythingElseHandler(IDialogContext context, IAwaitable<bool> argument)
+        //{
+        //    var answer = await argument;
+        //    if (answer)
+        //    {
+        //        await GeneralGreeting(context, null);
+        //    }
+        //    else
+        //    {
+        //        string message = $"Thanks for using I Bot. Hope you have a great day!";
+        //        await context.PostAsync(message);
+
+        //        //var survey = context.MakeMessage();
+
+        //        //var attachment = GetSurveyCard();
+        //        //survey.Attachments.Add(attachment);
+
+        //        //await context.PostAsync(survey);
+
+        //        context.Done<string>("conversation ended.");
+        //    }
+        //}
         public virtual async Task GeneralGreeting(IDialogContext context, IAwaitable<string> argument)
         {
             string message = $"Great! What else that can I help you?";
