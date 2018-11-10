@@ -367,8 +367,8 @@ namespace Microsoft.Bot.Sample.LuisBot
 
             return heroCard.ToAttachment();
         }
-        [LuisIntent("GREETING")]
-        public async Task GREETING(IDialogContext context, LuisResult result)
+        [LuisIntent("PROCESS")]
+        public async Task PROCESS(IDialogContext context, LuisResult result)
         {
             string message = "Glad to talk to you. Welcome to iBot - your Virtual Wasl Property Consultant.";
             await context.PostAsync(message);
