@@ -68,8 +68,8 @@ namespace Microsoft.Bot.Sample.LuisBot
         {
             //await this.ShowLuisResult(context, result);
             //await this.ShowLuisResult(context, result);
-            if (customerName == null)
-            {
+            //if (customerName == null)
+            //{
                 string message = "Glad to talk to you. Welcome to iBot - your Virtual Wasl Property Consultant.";
                 await context.PostAsync(message);
 
@@ -89,19 +89,22 @@ namespace Microsoft.Bot.Sample.LuisBot
                 //            "Arabic"
                 //        },
                 //        "Let's start by choosing your preferred language?");
-            }
-            else
-            {
-                string message = "Tell me " + customerName + ". How i can help you?";
-                await context.PostAsync(message);
-                context.Wait(MessageReceived);
-            }
+          //  }
+            //else
+            //{
+            //    string message = "Tell me " + customerName + ". How i can help you?";
+            //    await context.PostAsync(message);
+            //    context.Wait(MessageReceived);
+            //}
         }
+
+    
+
         public async Task ResumeLanguageOptions(IDialogContext context, IAwaitable<string> argument)
         {
-            var userFeedback = await argument;
+            string userFeedback = await argument;
             string selection = userFeedback;
-            if (selection.Contains("English"))
+            if (selection.Equals("English"))
             {
                 //PromptDialog.Choice(context, ServiceMessageReceivedAsyncService,
                 //       new List<string>()
