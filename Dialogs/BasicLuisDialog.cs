@@ -72,7 +72,7 @@ namespace Microsoft.Bot.Sample.LuisBot
                 string message = "Glad to talk to you. Welcome to iBot - your Virtual Wasl Property Consultant.";
                 await context.PostAsync(message);
 
-                PromptDialog.Choice(context, ResumePropertyOptions,
+                PromptDialog.Choice(context, ResumeLanguageOptions,
                         new List<string>()
                         {
                             "English",
@@ -87,12 +87,12 @@ namespace Microsoft.Bot.Sample.LuisBot
                 context.Wait(MessageReceived);
             }
         }
-        public virtual async Task ResumePropertyOptions(IDialogContext context, IAwaitable<string> argument)
+        public virtual async Task ResumeLanguageOptions(IDialogContext context, IAwaitable<string> argument)
         {
             var userFeedback = await argument;
             if (userFeedback.Contains("English"))
             {
-                PromptDialog.Choice(context, ServiceMessageReceivedAsync,
+                PromptDialog.Choice(context, ServiceMessageReceivedAsyncService,
                        new List<string>()
                        {
                             "New Lease Enquiry",
@@ -106,7 +106,7 @@ namespace Microsoft.Bot.Sample.LuisBot
             }
             else
             {
-                await context.PostAsync("I'm transferring you to an agent now...");
+                await context.PostAsync("Unable to understand. I'm transferring you to an agent now...");
 
                 // Transfer to the BotEscalation skill
                 IMessageActivity transferMsg = context.MakeMessage();
@@ -117,7 +117,7 @@ namespace Microsoft.Bot.Sample.LuisBot
                 await context.PostAsync(transferMsg);
             }
         }
-        public async Task ServiceMessageReceivedAsync(IDialogContext context, IAwaitable<string> result)
+        public async Task ServiceMessageReceivedAsyncService(IDialogContext context, IAwaitable<string> result)
         {
             var userFeedback = await result;
 
@@ -140,7 +140,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         }
         public async Task NameCategory(IDialogContext context, IAwaitable<string> result)
         {
-            PromptDialog.Choice(context, ServiceMessageReceivedAsyncHome,
+            PromptDialog.Choice(context, ServiceMessageReceivedAsyncHomeH,
                       new List<string>()
                       {
                             "Residential",
@@ -148,7 +148,7 @@ namespace Microsoft.Bot.Sample.LuisBot
                       },
                       "Are you looking for Residence/Commercial?");
         }
-        public async Task ServiceMessageReceivedAsyncHome(IDialogContext context, IAwaitable<string> result)
+        public async Task ServiceMessageReceivedAsyncHomeH(IDialogContext context, IAwaitable<string> result)
         {
             var userFeedback = await result;
 
@@ -171,7 +171,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         }
         public async Task PropertyBedrooms(IDialogContext context, IAwaitable<string> result)
         {
-            PromptDialog.Choice(context, ResumePropertyOptions,
+            PromptDialog.Choice(context, ResumePropertyOptionsR,
                     new List<string>()
                     {
                         "Single Family",
@@ -184,12 +184,12 @@ namespace Microsoft.Bot.Sample.LuisBot
                     },
                     "There are 54 available. Which type are you interested in?");
         }
-        public virtual async Task ResumePropertyOptions(IDialogContext context, IAwaitable<IMessageActivity> argument)
+        public virtual async Task ResumePropertyOptionsR(IDialogContext context, IAwaitable<string> argument)
         {
             var selection = await argument;
-            //string result = selection;
+            string result = selection;
 
-            string message = "Great there are 25  " + selection.Text + " homes/properties that meet your needs. You can swipe to see each home/property.";
+            string message = "Great there are 25  " + result + " homes/properties that meet your needs. You can swipe to see each home/property.";
             await context.PostAsync(message);
 
             var reply = context.MakeMessage();
@@ -402,7 +402,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         public async Task HelpIntent(IDialogContext context, LuisResult result)
         {
             //await this.ShowLuisResult(context, result);
-            await context.PostAsync("I'm transferring you to an agent now...");
+            await context.PostAsync("I am not able to understand. I'm transferring you to an agent now...");
 
             // Transfer to the BotEscalation skill
             IMessageActivity transferMsg = context.MakeMessage();
