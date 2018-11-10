@@ -29,6 +29,13 @@ namespace Microsoft.Bot.Sample.LuisBot
         {
         }
 
+        [LuisIntent("GREETING")]
+        public async Task GREETING(IDialogContext context, LuisResult result)
+        {
+            string message = "Glad to talk to you. Welcome to iBot - your Virtual Wasl Property Consultant.";
+            await context.PostAsync(message);
+        }
+
         [LuisIntent("None")]
         public async Task NoneIntent(IDialogContext context, LuisResult result)
         {
@@ -370,8 +377,8 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("PROCESS")]
         public async Task PROCESS(IDialogContext context, LuisResult result)
         {
-            string message = "Glad to talk to you. Welcome to iBot - your Virtual Wasl Property Consultant.";
-            await context.PostAsync(message);
+            //string message = "Glad to talk to you. Welcome to iBot - your Virtual Wasl Property Consultant.";
+            //await context.PostAsync(message);
 
             //await context.PostAsync("Welcome");
 
