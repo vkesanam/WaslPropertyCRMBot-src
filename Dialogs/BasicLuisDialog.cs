@@ -63,8 +63,8 @@ namespace Microsoft.Bot.Sample.LuisBot
             }
         }
 
-        [LuisIntent("Greeting")]
-        public async Task Greeting(IDialogContext context, LuisResult result)
+        [LuisIntent("ENQUIRY")]
+        public async Task ENQUIRY(IDialogContext context, LuisResult result)
         {
             string message = "Glad to talk to you. Welcome to iBot - your Virtual Wasl Property Consultant.";
             await context.PostAsync(message);
@@ -370,8 +370,8 @@ namespace Microsoft.Bot.Sample.LuisBot
 
             return heroCard.ToAttachment();
         }
-        [LuisIntent("ENQUIRY")]
-        public async Task ENQUIRY(IDialogContext context, LuisResult result)
+        [LuisIntent("GREETING")]
+        public async Task GREETING(IDialogContext context, LuisResult result)
         {
             PromptDialog.Text(
             context: context,
