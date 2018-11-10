@@ -97,10 +97,11 @@ namespace Microsoft.Bot.Sample.LuisBot
                 context.Wait(MessageReceived);
             }
         }
-        public virtual async Task ResumeLanguageOptions(IDialogContext context, IAwaitable<string> argument)
+        public async Task ResumeLanguageOptions(IDialogContext context, IAwaitable<string> argument)
         {
             var userFeedback = await argument;
-            if (userFeedback.Contains("English"))
+            string selection = userFeedback;
+            if (selection.Contains("English"))
             {
                 //PromptDialog.Choice(context, ServiceMessageReceivedAsyncService,
                 //       new List<string>()
