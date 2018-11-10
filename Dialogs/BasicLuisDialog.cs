@@ -32,8 +32,28 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("GREETING")]
         public async Task GREETING(IDialogContext context, LuisResult result)
         {
-            string message = "Glad to talk to you. Welcome to iBot - your Virtual Wasl Property Consultant.";
-            await context.PostAsync(message);
+            context.Wait<IMessageActivity>(GreetingTest);
+
+        }
+        public async Task GreetingTest(IDialogContext context, IAwaitable<IMessageActivity> argument)
+        {
+            var message = await argument;
+
+            if (message.ChannelId == "directline")
+            {
+                var laChannelData = message.GetChannelData<LiveAssistChannelData>();
+
+                switch (laChannelData.Type)
+                {
+                    case "visitorContextData":
+                        //process context data if required. This is the first message received so say hello.
+                        await context.PostAsync("Hi, I am an echo bot and will repeat everything you said.");
+                        break;
+                    default:
+                        await context.PostAsync("This is not a Live Assist message " + laChannelData.Type);
+                        break;
+                }
+            }
         }
 
         [LuisIntent("None")]
