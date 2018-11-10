@@ -62,42 +62,58 @@ namespace Microsoft.Bot.Sample.LuisBot
                 context.Done<bool>(true);
             }
         }
+
+        [LuisIntent("Greeting")]
+        public async Task Greeting(IDialogContext context, LuisResult result)
+        {
+            string message = "Glad to talk to you. Welcome to iBot - your Virtual Wasl Property Consultant.";
+            await context.PostAsync(message);
+
+            //await context.PostAsync("Welcome");
+
+            PromptDialog.Text(
+            context: context,
+            resume: ResumeLanguageOptions,
+            prompt: "Which language you want to prefer? 1. English 2. Arabic",
+            retry: "Sorry, I don't understand that.");
+        }
+
         // Go to https://luis.ai and create a new intent, then train/publish your luis app.
         // Finally replace "Greeting" with the name of your newly created intent in the following handler
-        [LuisIntent("Greeting")]
-        public async Task GreetingIntent(IDialogContext context, LuisResult result)
-        {
-            //await this.ShowLuisResult(context, result);
-            //await this.ShowLuisResult(context, result);
-            //if (customerName == null)
-            //{
-                string message = "Glad to talk to you. Welcome to iBot - your Virtual Wasl Property Consultant.";
-                await context.PostAsync(message);
+        //[LuisIntent("Greeting")]
+        //public async Task GreetingIntent(IDialogContext context, LuisResult result)
+        //{
+        //    //await this.ShowLuisResult(context, result);
+        //    //await this.ShowLuisResult(context, result);
+        //    //if (customerName == null)
+        //    //{
+        //        string message = "Glad to talk to you. Welcome to iBot - your Virtual Wasl Property Consultant.";
+        //        await context.PostAsync(message);
 
-                //await context.PostAsync("Welcome");
+        //        //await context.PostAsync("Welcome");
 
-                //PromptDialog.Text(
-                //context: context,
-                //resume: ResumeLanguageOptions,
-                //prompt: "Which language you want to prefer? 1. English 2. Arabic",
-                //retry: "Sorry, I don't understand that.");
+        //        //PromptDialog.Text(
+        //        //context: context,
+        //        //resume: ResumeLanguageOptions,
+        //        //prompt: "Which language you want to prefer? 1. English 2. Arabic",
+        //        //retry: "Sorry, I don't understand that.");
 
 
-                //PromptDialog.Choice(context, ResumeLanguageOptions,
-                //        new List<string>()
-                //        {
-                //            "English",
-                //            "Arabic"
-                //        },
-                //        "Let's start by choosing your preferred language?");
-          //  }
-            //else
-            //{
-            //    string message = "Tell me " + customerName + ". How i can help you?";
-            //    await context.PostAsync(message);
-            //    context.Wait(MessageReceived);
-            //}
-        }
+        //        //PromptDialog.Choice(context, ResumeLanguageOptions,
+        //        //        new List<string>()
+        //        //        {
+        //        //            "English",
+        //        //            "Arabic"
+        //        //        },
+        //        //        "Let's start by choosing your preferred language?");
+        //  //  }
+        //    //else
+        //    //{
+        //    //    string message = "Tell me " + customerName + ". How i can help you?";
+        //    //    await context.PostAsync(message);
+        //    //    context.Wait(MessageReceived);
+        //    //}
+        //}
 
     
         public async Task ResumeLanguageOptions(IDialogContext context, IAwaitable<string> argument)
