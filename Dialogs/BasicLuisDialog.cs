@@ -75,13 +75,20 @@ namespace Microsoft.Bot.Sample.LuisBot
 
                 await context.PostAsync("Welcome");
 
-                PromptDialog.Choice(context, ResumeLanguageOptions,
-                        new List<string>()
-                        {
-                            "English",
-                            "Arabic"
-                        },
-                        "Let's start by choosing your preferred language?");
+                PromptDialog.Text(
+                context: context,
+                resume: ResumeLanguageOptions,
+                prompt: $@"Which language you want to prefer May i know your Name please?. {Environment.NewLine} English {Environment.NewLine} Arabic",
+                retry: "Sorry, I don't understand that.");
+
+
+                //PromptDialog.Choice(context, ResumeLanguageOptions,
+                //        new List<string>()
+                //        {
+                //            "English",
+                //            "Arabic"
+                //        },
+                //        "Let's start by choosing your preferred language?");
             }
             else
             {
