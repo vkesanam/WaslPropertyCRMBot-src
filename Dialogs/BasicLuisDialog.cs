@@ -19,6 +19,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         public string email;
         public string phone;
         public string complaint;
+        public enum booleanChoice { Yes, No }
 
         public BasicLuisDialog() : base(new LuisService(new LuisModelAttribute(
             ConfigurationManager.AppSettings["LuisAppId"], 
@@ -232,11 +233,11 @@ namespace Microsoft.Bot.Sample.LuisBot
 
             await context.PostAsync("Thank you for your interest. Our property consultant will get back to you shortly.");
 
-            PromptDialog.Confirm(
-                 context: context,
-                 resume: AnythingElseHandler,
-                 prompt: "Is there anything else that I could help?",
-                 retry: "Sorry, I don't understand that.");
+            //PromptDialog.Confirm(
+            //     context: context,
+            //     resume: AnythingElseHandler,
+            //     prompt: "Is there anything else that I could help?",
+            //     retry: "Sorry, I don't understand that.");
             //CRMConnection.CreateLeadReg(customerName, email);
         }
         private static IList<Attachment> GetCardsAttachments()
@@ -363,34 +364,44 @@ namespace Microsoft.Bot.Sample.LuisBot
             //prompt: "Is there anything else that I could help?",
             //retry: "Sorry, I don't understand that.");
 
-            PromptDialog.Confirm(
-                    context,
-                    AnythingElseHandler,
-                    "Is there anything else that I could help?",
-                    "Didn't get that!",
-                    promptStyle: PromptStyle.Auto);
+            //PromptDialog.Confirm(
+            //        context,
+            //        AnythingElseHandler,
+            //        "Is there anything else that I could help?",
+            //        "Didn't get that!",
+            //        promptStyle: PromptStyle.Auto);
+
+            PromptDialog.Choice(
+                context: context,
+                resume: AnythingElseHandler,
+                options: (IEnumerable<booleanChoice>)Enum.GetValues(typeof(booleanChoice)),
+                prompt: "Is there anything else that I could help?",
+                retry: "Please try again.",
+                promptStyle: PromptStyle.Auto
+            );
             //CRMConnection.CreateCase(complaint, customerName, phone, email);
 
 
         }
-        public async Task AnythingElseHandler(IDialogContext context, IAwaitable<bool> argument)
+        public Task AnythingElseHandler(IDialogContext context, IAwaitable<booleanChoice> argument)
         {
-            var confirm = await argument;
-            if (confirm)
-            {
-                //this.count = 1;
-                //await context.PostAsync("Reset count.");
-                string message = $"Great! What else that can I help you?";
-                await context.PostAsync(message);
-                //context.Wait(MessageReceived);
-            }
-            else
-            {
-                //await context.PostAsync("Did not reset count.");
-                string message = $"Thanks for using I Bot. Hope you have a great day!";
-                await context.PostAsync(message);
-            }
-            context.Wait(MessageReceived);
+            return null;
+            //var confirm = await argument;
+            //if (confirm)
+            //{
+            //    //this.count = 1;
+            //    //await context.PostAsync("Reset count.");
+            //    string message = "Great! What else that can I help you?";
+            //    await context.PostAsync(message);
+            //    //context.Wait(MessageReceived);
+            //}
+            //else
+            //{
+            //    //await context.PostAsync("Did not reset count.");
+            //    string message = "Thanks for using I Bot. Hope you have a great day!";
+            //    await context.PostAsync(message);
+            //}
+            //context.Wait(MessageReceived);
         }
         //public async Task AnythingElseHandler(IDialogContext context, IAwaitable<bool> argument)
         //{
