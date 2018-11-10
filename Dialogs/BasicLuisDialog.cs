@@ -76,11 +76,11 @@ namespace Microsoft.Bot.Sample.LuisBot
 
                 //await context.PostAsync("Welcome");
 
-                PromptDialog.Text(
-                context: context,
-                resume: ResumeLanguageOptions,
-                prompt: "Which language you want to prefer? 1. English 2. Arabic",
-                retry: "Sorry, I don't understand that.");
+                //PromptDialog.Text(
+                //context: context,
+                //resume: ResumeLanguageOptions,
+                //prompt: "Which language you want to prefer? 1. English 2. Arabic",
+                //retry: "Sorry, I don't understand that.");
 
 
                 //PromptDialog.Choice(context, ResumeLanguageOptions,
@@ -353,6 +353,19 @@ namespace Microsoft.Bot.Sample.LuisBot
             };
 
             return heroCard.ToAttachment();
+        }
+        [LuisIntent("ENQUIRY")]
+        public async Task ENQUIRY(IDialogContext context, LuisResult result)
+        {
+            PromptDialog.Text(
+            context: context,
+            resume: PropertySelection,
+            prompt: "Which category you want to prefer?",
+            retry: "Sorry, I don't understand that.");
+        }
+        public async Task PropertySelection(IDialogContext context,IAwaitable<string> result)
+        {
+            await context.PostAsync("THanks for your selection");
         }
         [LuisIntent("CASE")]
         public async Task CASE(IDialogContext context, LuisResult result)
