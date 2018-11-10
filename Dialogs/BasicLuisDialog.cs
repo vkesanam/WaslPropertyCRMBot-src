@@ -73,12 +73,12 @@ namespace Microsoft.Bot.Sample.LuisBot
                 string message = "Glad to talk to you. Welcome to iBot - your Virtual Wasl Property Consultant.";
                 await context.PostAsync(message);
 
-                await context.PostAsync("Welcome");
+                //await context.PostAsync("Welcome");
 
                 PromptDialog.Text(
                 context: context,
                 resume: ResumeLanguageOptions,
-                prompt: $@"Which language you want to prefer May i know your Name please?. {Environment.NewLine} English {Environment.NewLine} Arabic",
+                prompt: $@"Which language you want to prefer?. {Environment.NewLine} 1. English {Environment.NewLine} 2. Arabic",
                 retry: "Sorry, I don't understand that.");
 
 
@@ -102,13 +102,20 @@ namespace Microsoft.Bot.Sample.LuisBot
             var userFeedback = await argument;
             if (userFeedback.Contains("English"))
             {
-                PromptDialog.Choice(context, ServiceMessageReceivedAsyncService,
-                       new List<string>()
-                       {
-                            "New Lease Enquiry",
-                            "Customer Support"
-                       },
-                       "Please choose below a category of interest.");
+                //PromptDialog.Choice(context, ServiceMessageReceivedAsyncService,
+                //       new List<string>()
+                //       {
+                //            "New Lease Enquiry",
+                //            "Customer Support"
+                //       },
+                //       "Please choose below a category of interest.");
+
+                PromptDialog.Text(
+            context: context,
+            resume: ServiceMessageReceivedAsyncService,
+            prompt: $@"Which category you want to prefer?. {Environment.NewLine} 1. New Lease Enquiry {Environment.NewLine} 2. Customer Support",
+            retry: "Sorry, I don't understand that.");
+
             }
             else if (userFeedback.Contains("Arabic"))
             {
@@ -150,13 +157,20 @@ namespace Microsoft.Bot.Sample.LuisBot
         }
         public async Task NameCategory(IDialogContext context, IAwaitable<string> result)
         {
-            PromptDialog.Choice(context, ServiceMessageReceivedAsyncHomeH,
-                      new List<string>()
-                      {
-                            "Residential",
-                            "Commercial"
-                      },
-                      "Are you looking for Residence/Commercial?");
+            //PromptDialog.Choice(context, ServiceMessageReceivedAsyncHomeH,
+            //          new List<string>()
+            //          {
+            //                "Residential",
+            //                "Commercial"
+            //          },
+            //          "Are you looking for Residence/Commercial?");
+
+            PromptDialog.Text(
+           context: context,
+           resume: ServiceMessageReceivedAsyncHomeH,
+           prompt: "Are you looking for Resedence/Commercial?",
+           retry: "Sorry, I don't understand that.");
+
         }
         public async Task ServiceMessageReceivedAsyncHomeH(IDialogContext context, IAwaitable<string> result)
         {
@@ -181,18 +195,25 @@ namespace Microsoft.Bot.Sample.LuisBot
         }
         public async Task PropertyBedrooms(IDialogContext context, IAwaitable<string> result)
         {
-            PromptDialog.Choice(context, ResumePropertyOptionsR,
-                    new List<string>()
-                    {
-                        "Single Family",
-                        "Studio",
-                        "1 Bed Room",
-                        "2 Bed Room",
-                        "3 Bed Room",
-                        "4 Bed Room",
-                        "5 Bed Room"
-                    },
-                    "There are 54 available. Which type are you interested in?");
+            //PromptDialog.Choice(context, ResumePropertyOptionsR,
+            //        new List<string>()
+            //        {
+            //            "Single Family",
+            //            "Studio",
+            //            "1 Bed Room",
+            //            "2 Bed Room",
+            //            "3 Bed Room",
+            //            "4 Bed Room",
+            //            "5 Bed Room"
+            //        },
+            //        "There are 54 available. Which type are you interested in?");
+
+            PromptDialog.Text(
+           context: context,
+           resume: ResumePropertyOptionsR,
+           prompt: $@"There are 54 available. Which type are you interested in? {Environment.NewLine} Single Family {Environment.NewLine} Studio",
+           retry: "Sorry, I don't understand that.");
+
         }
         public virtual async Task ResumePropertyOptionsR(IDialogContext context, IAwaitable<string> argument)
         {
@@ -210,16 +231,22 @@ namespace Microsoft.Bot.Sample.LuisBot
             await context.PostAsync(reply);
 
             //context.Wait(this.MessageReceived);
-            PromptDialog.Confirm(
-                 context: context,
-                 resume: CustomerLeadCreation,
-                 prompt: "Would you like to get updates of new listings like these?",
-                 retry: "Sorry, I don't understand that.");
+            //PromptDialog.Confirm(
+            //     context: context,
+            //     resume: CustomerLeadCreation,
+            //     prompt: "Would you like to get updates of new listings like these?",
+            //     retry: "Sorry, I don't understand that.");
+
+            PromptDialog.Text(
+          context: context,
+          resume: CustomerLeadCreation,
+          prompt: "Would you like to get updates of new listings like these ? ",
+          retry: "Sorry, I don't understand that.");
         }
-        public async Task CustomerLeadCreation(IDialogContext context, IAwaitable<bool> result)
+        public async Task CustomerLeadCreation(IDialogContext context, IAwaitable<string> result)
         {
             var answer = await result;
-            if (answer)
+            if (answer.Contains("y") || answer.Contains("Yes"))
             {
                 PromptDialog.Text(
                context: context,
@@ -246,6 +273,12 @@ namespace Microsoft.Bot.Sample.LuisBot
             //     prompt: "Is there anything else that I could help?",
             //     retry: "Sorry, I don't understand that.");
             //CRMConnection.CreateLeadReg(customerName, email);
+
+            PromptDialog.Text(
+              context: context,
+              resume: AnythingElseHandler,
+              prompt: "Is there anything else that I could help?",
+              retry: "Sorry, I don't understand that.");
         }
         private static IList<Attachment> GetCardsAttachments()
         {
@@ -379,34 +412,38 @@ namespace Microsoft.Bot.Sample.LuisBot
             //        promptStyle: PromptStyle.Auto);
 
             //CRMConnection.CreateCase(complaint, customerName, phone, email);
-            PromptDialog.Confirm(context, AnythingElseHandler, "Is there anything else that I could help?");
+            //PromptDialog.Confirm(context, AnythingElseHandler, "Is there anything else that I could help?");
+            PromptDialog.Text(
+            context: context,
+            resume: AnythingElseHandler,
+            prompt: "Is there anything else that I could help?",
+            retry: "Sorry, I don't understand that.");
 
         }
 
-        public async Task AnythingElseHandler(IDialogContext context, IAwaitable<bool> argument)
+        public async Task AnythingElseHandler(IDialogContext context, IAwaitable<string> argument)
         {
-            var confirmation = await argument;
-            await context.PostAsync(confirmation ? "Great! What else that can I help you?" : "Thanks for using I Bot. Hope you have a great day!");
 
-            //var answer = await argument;
-            //if (answer)
-            //{
-            //    await GeneralGreeting(context, null);
-            //}
-            //else
-            //{
-            //    string message = $"Thanks for using I Bot. Hope you have a great day!";
-            //    await context.PostAsync(message);
 
-            //    //var survey = context.MakeMessage();
+            var answer = await argument;
+            if (answer.Contains("Yes") || answer.StartsWith("y"))
+            {
+                await GeneralGreeting(context, null);
+            }
+            else
+            {
+                string message = $"Thanks for using I Bot. Hope you have a great day!";
+                await context.PostAsync(message);
 
-            //    //var attachment = GetSurveyCard();
-            //    //survey.Attachments.Add(attachment);
+                //var survey = context.MakeMessage();
 
-            //    //await context.PostAsync(survey);
+                //var attachment = GetSurveyCard();
+                //survey.Attachments.Add(attachment);
 
-            //    context.Done<string>("conversation ended.");
-            //}
+                //await context.PostAsync(survey);
+
+                context.Done<string>("conversation ended.");
+            }
         }
         public virtual async Task GeneralGreeting(IDialogContext context, IAwaitable<string> argument)
         {
