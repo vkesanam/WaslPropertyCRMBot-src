@@ -72,6 +72,8 @@ namespace Microsoft.Bot.Sample.LuisBot
                 string message = "Glad to talk to you. Welcome to iBot - your Virtual Wasl Property Consultant.";
                 await context.PostAsync(message);
 
+                await context.PostAsync("Welcome");
+
                 PromptDialog.Choice(context, ResumeLanguageOptions,
                         new List<string>()
                         {
