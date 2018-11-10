@@ -66,16 +66,13 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("ENQUIRY")]
         public async Task ENQUIRY(IDialogContext context, LuisResult result)
         {
-            string message = "Glad to talk to you. Welcome to iBot - your Virtual Wasl Property Consultant.";
-            await context.PostAsync(message);
-
-            //await context.PostAsync("Welcome");
-
             PromptDialog.Text(
-            context: context,
-            resume: ResumeLanguageOptions,
-            prompt: "Which language you want to prefer? 1. English 2. Arabic",
-            retry: "Sorry, I don't understand that.");
+          context: context,
+          resume: ServiceMessageReceivedAsyncService,
+          prompt: $@"Which category you want to prefer?. {Environment.NewLine} 1. New Lease Enquiry {Environment.NewLine} 2. Customer Support",
+          retry: "Sorry, I don't understand that.");
+
+           
         }
 
         // Go to https://luis.ai and create a new intent, then train/publish your luis app.
@@ -373,10 +370,15 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("GREETING")]
         public async Task GREETING(IDialogContext context, LuisResult result)
         {
+            string message = "Glad to talk to you. Welcome to iBot - your Virtual Wasl Property Consultant.";
+            await context.PostAsync(message);
+
+            //await context.PostAsync("Welcome");
+
             PromptDialog.Text(
             context: context,
-            resume: PropertySelection,
-            prompt: "Which category you want to prefer?",
+            resume: ResumeLanguageOptions,
+            prompt: "Which language you want to prefer? 1. English 2. Arabic",
             retry: "Sorry, I don't understand that.");
         }
         public async Task PropertySelection(IDialogContext context,IAwaitable<string> result)
