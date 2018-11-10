@@ -19,6 +19,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         public string email;
         public string phone;
         public string complaint;
+        public string language;
         public enum booleanChoice { Yes, No }
 
         public BasicLuisDialog() : base(new LuisService(new LuisModelAttribute(
@@ -52,7 +53,7 @@ namespace Microsoft.Bot.Sample.LuisBot
                 transferMsg.Text = "";
                 transferMsg.Type = ActivityTypes.Message;
                 await context.PostAsync(transferMsg);
-                context.Wait(MessageReceived);
+                //context.Wait(MessageReceived);
             }
             else
             {
@@ -78,7 +79,7 @@ namespace Microsoft.Bot.Sample.LuisBot
                 PromptDialog.Text(
                 context: context,
                 resume: ResumeLanguageOptions,
-                prompt: $@"Which language you want to prefer?. {Environment.NewLine} 1. English {Environment.NewLine} 2. Arabic",
+                prompt: "Which language you want to prefer? 1. English 2. Arabic",
                 retry: "Sorry, I don't understand that.");
 
 
@@ -99,44 +100,49 @@ namespace Microsoft.Bot.Sample.LuisBot
         }
 
     
-
         public async Task ResumeLanguageOptions(IDialogContext context, IAwaitable<string> argument)
         {
-            string userFeedback = await argument;
-            string selection = userFeedback;
-            if (selection.Equals("English"))
-            {
-                //PromptDialog.Choice(context, ServiceMessageReceivedAsyncService,
-                //       new List<string>()
-                //       {
-                //            "New Lease Enquiry",
-                //            "Customer Support"
-                //       },
-                //       "Please choose below a category of interest.");
+            PromptDialog.Text(
+           context: context,
+           resume: ServiceMessageReceivedAsyncService,
+           prompt: $@"Which category you want to prefer?. {Environment.NewLine} 1. New Lease Enquiry {Environment.NewLine} 2. Customer Support",
+           retry: "Sorry, I don't understand that.");
 
-                PromptDialog.Text(
-            context: context,
-            resume: ServiceMessageReceivedAsyncService,
-            prompt: $@"Which category you want to prefer?. {Environment.NewLine} 1. New Lease Enquiry {Environment.NewLine} 2. Customer Support",
-            retry: "Sorry, I don't understand that.");
+            //string userFeedback = await argument;
+            //language = userFeedback;
+            //if (language.Contains("English"))
+            //{
+            //    //PromptDialog.Choice(context, ServiceMessageReceivedAsyncService,
+            //    //       new List<string>()
+            //    //       {
+            //    //            "New Lease Enquiry",
+            //    //            "Customer Support"
+            //    //       },
+            //    //       "Please choose below a category of interest.");
 
-            }
-            else if (userFeedback.Contains("Arabic"))
-            {
+            //    PromptDialog.Text(
+            //context: context,
+            //resume: ServiceMessageReceivedAsyncService,
+            //prompt: $@"Which category you want to prefer?. {Environment.NewLine} 1. New Lease Enquiry {Environment.NewLine} 2. Customer Support",
+            //retry: "Sorry, I don't understand that.");
 
-            }
-            else
-            {
-                await context.PostAsync("Unable to understand. I'm transferring you to an agent now...");
+            //}
+            //else if (language.Contains("Arabic"))
+            //{
 
-                // Transfer to the BotEscalation skill
-                IMessageActivity transferMsg = context.MakeMessage();
-                JObject transferChannelData = JObject.Parse(@"{'type':'transfer','skill':'BotEscalation'}");
-                transferMsg.ChannelData = transferChannelData;
-                transferMsg.Text = "";
-                transferMsg.Type = ActivityTypes.Message;
-                await context.PostAsync(transferMsg);
-            }
+            //}
+            //else
+            //{
+            //    await context.PostAsync("Unable to understand. I'm transferring you to an agent now...");
+
+            //    // Transfer to the BotEscalation skill
+            //    IMessageActivity transferMsg = context.MakeMessage();
+            //    JObject transferChannelData = JObject.Parse(@"{'type':'transfer','skill':'BotEscalation'}");
+            //    transferMsg.ChannelData = transferChannelData;
+            //    transferMsg.Text = "";
+            //    transferMsg.Type = ActivityTypes.Message;
+            //    await context.PostAsync(transferMsg);
+            //}
         }
         public async Task ServiceMessageReceivedAsyncService(IDialogContext context, IAwaitable<string> result)
         {
